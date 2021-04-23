@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# entrypoint-functions.sh script for UniFi Docker container
+# License: Apache-2.0
+
+BASEDIR="/opt/app"
+DATADIR=${BASEDIR}/data
+
+[ ! -f ${DATADIR}/system.properties ] || api_port=$(grep "^[^#;]" ${DATADIR}/system.properties | sed -n 's/unifi.http.port=\([0-9]\+\)/\1/p')
+
+api_port=${api_port:-8080}
+
+http_code=$(curl -s --connect-timeout 1 -o /dev/null -w "%{http_code}" http://localhost:${api_port}/status)
+
+if [ "${http_code}" != "200" ]; then
+        echo "Error: UniFi API http status code ${http_code}, expecting 200"
+        exit 1
+    else
+        echo "UniFi API http status code ${http_code}: OK"
+        exit 0
+fi
