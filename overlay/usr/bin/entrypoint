@@ -18,7 +18,7 @@ JVM_OPTS="${UNIFI_JVM_EXTRA_OPTS} -Djava.awt.headless=true -Dfile.encoding=UTF-8
 
 if [ -n "$UNIFI_DB_HOST" ]
 then
-    log_info "Wait for mongiDB server on '${UNIFI_DB_HOST}:${UNIFI_DB_PORT:-27017}'"
+    log_info "Wait for mongoDB server on '${UNIFI_DB_HOST}:${UNIFI_DB_PORT:-27017}'"
     /usr/local/bin/wait-for "${UNIFI_DB_HOST}":"${UNIFI_DB_PORT:-27017}"
 else
     log_error "Required environment variable '\$UNIFI_DB_HOST' not set"
