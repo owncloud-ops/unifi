@@ -1,13 +1,13 @@
-# Unifi Controller
+# unifi
 
 [![Build Status](https://drone.owncloud.com/api/badges/owncloud-ops/unifi/status.svg)](https://drone.owncloud.com/owncloud-ops/unifi/)
 [![Docker Hub](https://img.shields.io/badge/docker-latest-blue.svg?logo=docker&logoColor=white)](https://hub.docker.com/r/owncloudops/unifi)
 
-Docker image for Unifi Controller.
+Docker image for [Ubiquiti](https://www.ui.com/) Unifi Controller.
 
 ## Ports
 
-For more details see [Unif Port Usage](https://help.ui.com/hc/en-us/articles/218506997-UniFi-Ports-Used).
+For more details see [Unifi Port Usage](https://help.ui.com/hc/en-us/articles/218506997-UniFi-Ports-Used).
 
 - 3478/udp (port used for STUN connection)
 - 6789/tcp (port used for UniFi mobile speed test)
