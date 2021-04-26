@@ -18,6 +18,7 @@ ENV GOMPLATE_VERSION="${GOMPLATE_VERSION:-v3.9.0}"
 ENV WAIT_FOR_VERSION="${WAIT_FOR_VERSION:-v0.1.0}"
 
 ENV TZ=UTC
+ENV UNIFI_JVM_INIT_HEAP_SIZE=1024M
 
 ADD overlay /
 
@@ -44,6 +45,8 @@ RUN apk --update add --virtual .build-deps curl libarchive-tools tar && \
     apk del .build-deps && \
     rm -rf /var/cache/apk/* && \
     rm -rf /tmp/*
+
+VOLUME /opt/app/unifi/data
 
 EXPOSE 3478/udp 6789/tcp 8080/tcp 8443/tcp
 

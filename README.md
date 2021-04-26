@@ -7,58 +7,26 @@ Docker image for Unifi Controller.
 
 ## Ports
 
-Ingress ports for L3 management over the internet
+For more details see [Unif Port Usage](https://help.ui.com/hc/en-us/articles/218506997-UniFi-Ports-Used).
 
-- 3478/udp  (port used for STUN connection)
-- 6789/tcp  (port used for UniFi mobile speed test)
-- 8080/tcp  (port used for device and controller communication)
-- 8443/tcp  (port used for controller GUI/API as seen in a web browser)
-- 8880/tcp  (port used for HTTP portal redirection)
-- 8843/tcp  (port used for HTTPS portal redirection)
-
-( see: https://help.ui.com/hc/en-us/articles/218506997-UniFi-Ports-Used#2 )
-
-Local ingress ports
-
-- 1900/udp  (port used for "Make controller discoverable on L2 network" in controller settings)
-- 3478/udp  (port used for STUN connection)
-- 5514/udp  (port used for remote syslog capture)
-- 6789/tcp  (port used for UniFi mobile speed test)
-- 8080/tcp  (port used for device and controller communication)
-- 8443/tcp  (port used for controller GUI/API as seen in a web browser)
-- 8880/tcp  (port used for HTTP portal redirection)
-- 8843/tcp  (port used for HTTPS portal redirection)
-- 27117/tcp (port used for local-bound database communication)
-- 5656-5699/udp (ports used for AP-EDU broadcasting)
-- 10001/udp (port used for device discovery)
-
-( see: https://help.ui.com/hc/en-us/articles/218506997-UniFi-Ports-Used#1 )
+- 3478/udp (port used for STUN connection)
+- 6789/tcp (port used for UniFi mobile speed test)
+- 8080/tcp (port used for device and controller communication)
+- 8443/tcp (port used for controller GUI/API as seen in a web browser)
 
 ## Volumes
 
-- /opt/app/data
-- /opt/app/log
-- /opt/app/run
+- /opt/app/unifi/data
 
 ## Environment Variables
 
 ```Shell
-JAVA_HOME = java
-UNIFI_DATA_DIR = /opt/app/data
-UNIFI_ENTROPY_GATHER_DEVICE = file:/dev/./urandom
-UNIFI_HEALTHCHECK_CODE = 200
-UNIFI_HEALTHCHECK_URL = https://localhost:8443
-UNIFI_HTTPS_PORT = 8443
-UNIFI_HTTP_PORT = 8080
-UNIFI_JVM_EXTRA_OPTS =
-UNIFI_JVM_INIT_HEAP_SIZE =
-UNIFI_JVM_MAX_HEAP_SIZE = 1024M
-UNIFI_LOG_DIR = /opt/app/log
-UNIFI_MONGODB_EXTRAARGS =
-UNIFI_MONGODB_NOJOURNAL =
-UNIFI_RUN_DIR = /opt/app/run
-UNIFI_SKIP_CHOWN = false
-UNIFI_SOURCE_DIR = /opt/app/unifi
+UNIFI_DB_HOST=
+UNIFI_DB_PORT=27017
+UNIFI_DB_NAME=unifi
+UNIFI_JVM_EXTRA_OPTS=
+UNIFI_JVM_MAX_HEAP_SIZE=1024M
+UNIFI_JVM_INIT_HEAP_SIZE=
 ```
 
 ## Build

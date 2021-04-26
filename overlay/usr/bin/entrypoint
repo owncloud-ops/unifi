@@ -4,14 +4,17 @@ set -eo pipefail
 source /usr/local/lib/log.sh
 
 BASEDIR="/opt/app/unifi"
-CERTDIR=${BASEDIR}/cert
 DATADIR=${BASEDIR}/data
 LOGDIR=${BASEDIR}/logs
 RUNDIR=${BASEDIR}/run
 
 /usr/local/bin/gomplate -o  ${DATADIR}/system.properties -f /etc/templates/system.properties.tmpl
 
-JVM_OPTS="${JVM_EXTRA_OPTS} -Djava.awt.headless=true -Dfile.encoding=UTF-8"
+[ ! -z "${UNIFI_JVM_MAX_HEAP_SIZE}" ] && UNIFI_JVM_EXTRA_OPTS="${UNIFI_JVM_EXTRA_OPTS} -Xmx${UNIFI_JVM_MAX_HEAP_SIZE}"
+[ ! -z "${UNIFI_JVM_INIT_HEAP_SIZE}" ] && UNIFI_JVM_EXTRA_OPTS="${UNIFI_JVM_EXTRA_OPTS} -Xms${UNIFI_JVM_INIT_HEAP_SIZE}"
+
+UNIFI_JVM_EXTRA_OPTS="${UNIFI_JVM_EXTRA_OPTS} -Dunifi.datadir=${DATADIR} -Dunifi.logdir=${LOGDIR} -Dunifi.rundir=${RUNDIR}"
+JVM_OPTS="${UNIFI_JVM_EXTRA_OPTS} -Djava.awt.headless=true -Dfile.encoding=UTF-8"
 
 if [ -n "$UNIFI_DB_HOST" ]
 then
