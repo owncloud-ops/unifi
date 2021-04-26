@@ -1,100 +1,26 @@
 #!/usr/bin/env sh
-
+# shellcheck disable=SC2039
 set -eo pipefail
-
 source /usr/local/lib/log.sh
 
-if [ ! -z "${UNIFI_SOURCE_DIR}" ];then
-  SOURCEDIR=${UNIFI_SOURCE_DIR} 
+BASEDIR="/opt/app/unifi"
+CERTDIR=${BASEDIR}/cert
+DATADIR=${BASEDIR}/data
+LOGDIR=${BASEDIR}/logs
+RUNDIR=${BASEDIR}/run
+
+/usr/local/bin/gomplate -o  ${DATADIR}/system.properties -f /etc/templates/system.properties.tmpl
+
+JVM_OPTS="${JVM_EXTRA_OPTS} -Djava.awt.headless=true -Dfile.encoding=UTF-8"
+
+if [ -n "$UNIFI_DB_HOST" ]
+then
+    log_info "Wait for mongiDB server on '${UNIFI_DB_HOST}:${UNIFI_DB_PORT:-27017}'"
+    /usr/local/bin/wait-for "${UNIFI_DB_HOST}":"${UNIFI_DB_PORT:-27017}"
 else
-  SOURCEDIR="/opt/app/unifi"
+    log_error "Required environment variable '\$UNIFI_DB_HOST' not set"
+    exit 1
 fi
-
-if [ ! -z "${UNIFI_DATA_DIR}" ];then
-  DATADIR=${UNIFI_DATA_DIR} 
-else
-  DATADIR="/opt/app/data"
-fi
-
-if [ ! -z "${UNIFI_LOG_DIR}" ];then
-  LOGDIR=${UNIFI_LOG_DIR} 
-else
-  LOGDIR="/opt/app/log"
-fi
-
-if [ ! -z "${UNIFI_RUN_DIR}" ];then
-  RUNDIR=${UNIFI_RUN_DIR} 
-else
-  RUNDIR="/opt/app/run"
-fi
-
-if [ ! -z "${UNIFI_HTTP_PORT}" ];then
-  UNIFI_HTTP_PORT="${UNIFI_HTTP_PORT}"
-else
-  UNIFI_HTTP_PORT="8080"
-fi
-
-if [ ! -z "${UNIFI_HTTPS_PORT}" ];then
-  UNIFI_HTTPS_PORT="${UNIFI_HTTPS_PORT}"
-else
-  UNIFI_HTTPS_PORT="8443"
-fi
-
-if [ ! -z "${UNIFI_ENTROPY_GATHER_DEVICE}" ];then
-  UNIFI_ENTROPY_GATHER_DEVICE="${UNIFI_ENTROPY_GATHER_DEVICE}"
-else
-  UNIFI_ENTROPY_GATHER_DEVICE="file:/dev/./urandom"
-fi
-
-if [ ! -z "${UNIFI_JVM_MAX_HEAP_SIZE}" ]; then
-  UNIFI_JVM_MAX_HEAP_SIZE="${UNIFI_JVM_MAX_HEAP_SIZE}"
-else
-  UNIFI_JVM_MAX_HEAP_SIZE="1024M"
-fi
-
-if [ ! -z "${UNIFI_JVM_INIT_HEAP_SIZE}" ]; then
-  UNIFI_JVM_INIT_HEAP_SIZE="${UNIFI_JVM_INIT_HEAP_SIZE}"
-else
-  UNIFI_JVM_INIT_HEAP_SIZE=""
-fi
-
-if [ ! -z "${UNIFI_JVM_EXTRA_OPTS}" ]; then
-  UNIFI_JVM_EXTRA_OPTS="${UNIFI_JVM_EXTRA_OPTS}"
-else
-  UNIFI_JVM_EXTRA_OPTS=""
-fi
-
-if [ ! -z "${UNIFI_HEALTHCHECK_URL}" ];then
-  UNIFI_HEALTHCHECK_URL="${UNIFI_HEALTHCHECK_URL}"
-else
-  UNIFI_HEALTHCHECK_URL="https://localhost:8443"
-fi
-
-if [ ! -z "${UNIFI_HEALTHCHECK_CODE}" ];then
-  UNIFI_HEALTHCHECK_CODE="${UNIFI_HEALTHCHECK_CODE}"
-else
-  UNIFI_HEALTHCHECK_CODE="200"
-fi
-
-if [ ! -z "${JAVA_HOME}" ];then
-  JAVA_HOME="${JAVA_HOME}"
-else
-  JAVA_HOME="/usr/bin"
-fi
-
-STARTCMD="${JAVA_HOME}/java -Djava.awt.headless=true -Dfile.encoding=UTF-8"
-
-[[ -n "${DATADIR}" ]] && STARTCMD="${STARTCMD} -Dunifi.datadir=${DATADIR}"
-[[ -n "${LOGDIR}" ]] && STARTCMD="${STARTCMD} -Dunifi.logsdir=${LOGDIR}"
-[[ -n "${RUNDIR}" ]] && STARTCMD="${STARTCMD} -Dunifi.rundir=${RUNDIR}"
-[[ -n "${UNIFI_HTTP_PORT}" ]] && STARTCMD="${STARTCMD} -Dunifi.http.port=${UNIFI_HTTP_PORT}"
-[[ -n "${UNIFI_HTTPS_PORT}" ]] && STARTCMD="${STARTCMD} -Dunifi.https.port=${UNIFI_HTTPS_PORT}"
-[[ -n "${UNIFI_ENTROPY_GATHER_DEVICE}" ]] && STARTCMD="${STARTCMD} -Djava.security.egd=${UNIFI_ENTROPY_GATHER_DEVICE}"
-[[ -n "${UNIFI_JVM_MAX_HEAP_SIZE}" ]] && STARTCMD="${STARTCMD} -Xmx${UNIFI_JVM_MAX_HEAP_SIZE}"
-[[ -n "${UNIFI_JVM_INIT_HEAP_SIZE}" ]] && STARTCMD="${STARTCMD} -Xms${UNIFI_JVM_INIT_HEAP_SIZE}"
-[[ -n "${UNIFI_JVM_EXTRA_OPTS}" ]] && STARTCMD="${STARTCMD} ${UNIFI_JVM_EXTRA_OPTS}"
-
-STARTCMD="${STARTCMD} -jar ${SOURCEDIR}/lib/ace.jar start"
 
 log_info "Start Unifi Controller\n"
-exec ${STARTCMD}
+exec /usr/bin/java ${JVM_OPTS} -jar ${BASEDIR}/lib/ace.jar start
