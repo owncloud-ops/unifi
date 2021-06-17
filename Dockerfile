@@ -15,7 +15,7 @@ ENV UNIFI_VERSION="${BUILD_VERSION:-5.14.23}"
 # renovate: datasource=github-releases depName=hairyhenderson/gomplate
 ENV GOMPLATE_VERSION="${GOMPLATE_VERSION:-v3.9.0}"
 # renovate: datasource=github-releases depName=thegeeklab/wait-for
-ENV WAIT_FOR_VERSION="${WAIT_FOR_VERSION:-v0.1.2}"
+ENV WAIT_FOR_VERSION="${WAIT_FOR_VERSION:-v0.2.0}"
 
 ENV TZ=UTC
 ENV UNIFI_JVM_INIT_HEAP_SIZE=1024M
