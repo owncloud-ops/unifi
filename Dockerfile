@@ -11,7 +11,7 @@ ARG BUILD_VERSION
 ARG GOMPLATE_VERSION
 ARG WAIT_FOR_VERSION
 
-ENV UNIFI_VERSION="${BUILD_VERSION:-5.14.23}"
+ENV UNIFI_VERSION="${BUILD_VERSION:-6.1.71}"
 # renovate: datasource=github-releases depName=hairyhenderson/gomplate
 ENV GOMPLATE_VERSION="${GOMPLATE_VERSION:-v3.10.0}"
 # renovate: datasource=github-releases depName=thegeeklab/wait-for
