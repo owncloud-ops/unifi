@@ -44,6 +44,6 @@ unifi.logStdout=true
 unifi.config.readEnv=false
 
 db.mongo.local=false
-db.mongo.uri=mongodb://{{ getenv "UNIFI_DB_HOST" }}:{{ getenv "UNIFI_DB_PORT" "27017" }}/{{ getenv "UNIFI_DB_NAME" "unifi" }}
-statdb.mongo.uri=mongodb://{{ getenv "UNIFI_DB_HOST" }}:{{ getenv "UNIFI_DB_PORT" "27017" }}/{{ getenv "UNIFI_DB_NAME" "unifi" }}_stat
+db.mongo.uri=mongodb://{{ getenv "UNIFI_DB_USER" }}:{{ getenv "UNIFI_DB_PASSWORD" }}@{{ getenv "UNIFI_DB_HOST" }}:{{ getenv "UNIFI_DB_PORT" "27017" }}/{{ getenv "UNIFI_DB_NAME" "unifi" }}
+statdb.mongo.uri=mongodb://{{ getenv "UNIFI_DB_USER" }}:{{ getenv "UNIFI_DB_PASSWORD" }}@{{ getenv "UNIFI_DB_HOST" }}:{{ getenv "UNIFI_DB_PORT" "27017" }}/{{ getenv "UNIFI_DB_NAME" "unifi" }}_stat
 unifi.db.name={{ getenv "UNIFI_DB_NAME" "unifi" }}
