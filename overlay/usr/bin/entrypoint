@@ -11,36 +11,31 @@ RUNDIR=${BASEDIR}/run
 filename=${DATADIR}/system.properties
 
 set_conf_value() {
-thekey="$1"
-newvalue="$2"
-if ! grep -R "^[#]*\s*${thekey}=.*" $filename > /dev/null; then
-  echo "APPENDING because '${thekey}' not found"
-  echo "$thekey=$newvalue" >> $filename
-else
-  echo "SETTING because '${thekey}' found already"
-  sed -ir "s,^[#]*\s*${thekey}=.*,$thekey=$newvalue," $filename
-fi
+  thekey="$1"
+  newvalue="$2"
+  if ! grep -R "^[#]*\s*${thekey}=.*" $filename > /dev/null; then
+    log_info "APPENDING because '${thekey}' not found"
+    log_info "$thekey=$newvalue" >> $filename
+  else
+    log_info "SETTING because '${thekey}' found already"
+    sed -ir "s,^[#]*\s*${thekey}=.*,$thekey=$newvalue," $filename
+  fi
 }
 
 MONGOURL="mongodb://${UNIFI_DB_USER}:${UNIFI_DB_PASSWORD}@${UNIFI_DB_HOST}:${UNIFI_DB_PORT}/${UNIFI_DB_NAME}?authSource=admin"
 MONGOSTATURL="mongodb://${UNIFI_DB_USER}:${UNIFI_DB_PASSWORD}@${UNIFI_DB_HOST}:${UNIFI_DB_PORT}/${UNIFI_DB_NAME}_stat?authSource=admin"
 
 if [ -f "${DATADIR}/system.properties" ]; then
-  set_conf_value "unifi.logStdout" "true"
-  set_conf_value "unifi.config.readEnv" "false"
-  set_conf_value "db.mongo.local" "false"
-  set_conf_value "db.mongo.uri" "$MONGOURL"
-  set_conf_value "statdb.mongo.uri" "$MONGOSTATURL"
-  set_conf_value "unifi.db.name" "$UNIFI_DB_NAME"
+  log_info "system.properties already exists, skipping..."
 else
   cp /etc/templates/system.properties.tmpl ${DATADIR}/system.properties  
-  set_conf_value "unifi.logStdout" "true"
-  set_conf_value "unifi.config.readEnv" "false"
-  set_conf_value "db.mongo.local" "false"
-  set_conf_value "db.mongo.uri" "$MONGOURL"
-  set_conf_value "statdb.mongo.uri" "$MONGOSTATURL"
-  set_conf_value "unifi.db.name" "$UNIFI_DB_NAME"
 fi
+
+set_conf_value "unifi.logStdout" "true"
+set_conf_value "db.mongo.local" "false"
+set_conf_value "db.mongo.uri" "$MONGOURL"
+set_conf_value "statdb.mongo.uri" "$MONGOSTATURL"
+set_conf_value "unifi.db.name" "$UNIFI_DB_NAME"
 
 [ ! -z "${UNIFI_JVM_MAX_HEAP_SIZE}" ] && UNIFI_JVM_EXTRA_OPTS="${UNIFI_JVM_EXTRA_OPTS} -Xmx${UNIFI_JVM_MAX_HEAP_SIZE}"
 [ ! -z "${UNIFI_JVM_INIT_HEAP_SIZE}" ] && UNIFI_JVM_EXTRA_OPTS="${UNIFI_JVM_EXTRA_OPTS} -Xms${UNIFI_JVM_INIT_HEAP_SIZE}"
