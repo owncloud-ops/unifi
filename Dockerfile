@@ -8,12 +8,9 @@ LABEL org.opencontainers.image.source="https://github.com/owncloud-ops/unifi"
 LABEL org.opencontainers.image.documentation="https://github.com/owncloud-ops/unifi"
 
 ARG BUILD_VERSION
-ARG GOMPLATE_VERSION
 ARG WAIT_FOR_VERSION
 
-ENV UNIFI_VERSION="${BUILD_VERSION:-6.1.71}"
-# renovate: datasource=github-releases depName=hairyhenderson/gomplate
-ENV GOMPLATE_VERSION="${GOMPLATE_VERSION:-v3.10.0}"
+ENV UNIFI_VERSION="${BUILD_VERSION:-6.4.54}"
 # renovate: datasource=github-releases depName=thegeeklab/wait-for
 ENV WAIT_FOR_VERSION="${WAIT_FOR_VERSION:-v0.2.0}"
 
@@ -30,9 +27,7 @@ RUN addgroup -g 1001 -S unifi && \
 
 RUN apk --update add --virtual .build-deps curl libarchive-tools tar && \
     apk --update add binutils coreutils curl libcap openjdk8-jre openssl shadow su-exec tzdata && \
-    curl -SsL -o /usr/local/bin/gomplate "https://github.com/hairyhenderson/gomplate/releases/download/${GOMPLATE_VERSION}/gomplate_linux-amd64-slim" && \
     curl -SsL -o /usr/local/bin/wait-for "https://github.com/thegeeklab/wait-for/releases/download/${WAIT_FOR_VERSION}/wait-for" && \
-    chmod 755 /usr/local/bin/gomplate && \
     chmod 755 /usr/local/bin/wait-for && \
     mkdir -p /opt/app/unifi/logs && \
     mkdir -p /opt/app/unifi/data && \
