@@ -28,7 +28,7 @@ MONGOSTATURL="mongodb://${UNIFI_DB_USER}:${UNIFI_DB_PASSWORD}@${UNIFI_DB_HOST}:$
 if [ -f "${DATADIR}/system.properties" ]; then
   log_info "system.properties already exists, skipping..."
 else
-  cp /etc/templates/system.properties.tmpl ${DATADIR}/system.properties  
+  cp /etc/templates/system.properties.tmpl ${DATADIR}/system.properties
 fi
 
 set_conf_value "unifi.logStdout" "true"
@@ -53,4 +53,4 @@ else
 fi
 
 log_info "Start Unifi Controller\n"
-exec /usr/bin/java ${JVM_OPTS} -jar ${BASEDIR}/lib/ace.jar start
+exec /usr/bin/java ${JVM_OPTS} -Dorg.xerial.snappy.tempdir=${BASEDIR}/tmp -jar ${BASEDIR}/lib/ace.jar start
