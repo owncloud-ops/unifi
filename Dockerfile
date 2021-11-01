@@ -26,7 +26,7 @@ RUN addgroup -g 1001 -S unifi && \
     adduser -S -D -H -u 1001 -h /opt/app -s /bin/bash -G unifi -g unifi unifi
 
 RUN apk --update add --virtual .build-deps curl libarchive-tools tar && \
-    apk --update add binutils coreutils curl libcap openjdk8-jre openssl shadow su-exec tzdata && \
+    apk --update add binutils coreutils curl libcap openjdk8-jre openssl shadow su-exec tzdata gcompat && \
     curl -SsL -o /usr/local/bin/wait-for "https://github.com/thegeeklab/wait-for/releases/download/${WAIT_FOR_VERSION}/wait-for" && \
     chmod 755 /usr/local/bin/wait-for && \
     mkdir -p /opt/app/unifi/logs && \
