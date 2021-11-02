@@ -1,29 +1,31 @@
 #!/usr/bin/env sh
-# shellcheck disable=SC2039
+# shellcheck disable=SC3040
 set -eo pipefail
+# shellcheck disable=SC3046,SC1091
 source /usr/local/lib/log.sh
 
 BASEDIR="/opt/app/unifi"
 DATADIR=${BASEDIR}/data
 LOGDIR=${BASEDIR}/logs
 RUNDIR=${BASEDIR}/run
+TMPDIR=${BASEDIR}/tmp
 
 filename=${DATADIR}/system.properties
 
 set_conf_value() {
   thekey="$1"
   newvalue="$2"
-  if ! grep -R "^[#]*\s*${thekey}=.*" $filename > /dev/null; then
+  if ! grep -R "^[#]*\s*${thekey}=.*" $filename >/dev/null; then
     log_info "APPENDING because '${thekey}' not found"
-    log_info "$thekey=$newvalue" >> $filename
+    log_info "$thekey=$newvalue" >>$filename
   else
     log_info "SETTING because '${thekey}' found already"
     sed -ir "s,^[#]*\s*${thekey}=.*,$thekey=$newvalue," $filename
   fi
 }
 
-MONGOURL="mongodb://${UNIFI_DB_USER}:${UNIFI_DB_PASSWORD}@${UNIFI_DB_HOST}:${UNIFI_DB_PORT}/${UNIFI_DB_NAME}?authSource=admin"
-MONGOSTATURL="mongodb://${UNIFI_DB_USER}:${UNIFI_DB_PASSWORD}@${UNIFI_DB_HOST}:${UNIFI_DB_PORT}/${UNIFI_DB_NAME}_stat?authSource=admin"
+MONGOURL="mongodb://${UNIFI_DB_USER}:${UNIFI_DB_PASSWORD}@${UNIFI_DB_HOST}:${UNIFI_DB_PORT:-27017}/${UNIFI_DB_NAME:-unifi}?authSource=admin"
+MONGOSTATURL="mongodb://${UNIFI_DB_USER}:${UNIFI_DB_PASSWORD}@${UNIFI_DB_HOST}:${UNIFI_DB_PORT:-27017}/${UNIFI_DB_NAME:-unifi}_stat?authSource=admin"
 
 if [ -f "${DATADIR}/system.properties" ]; then
   log_info "system.properties already exists, skipping..."
@@ -35,22 +37,21 @@ set_conf_value "unifi.logStdout" "true"
 set_conf_value "db.mongo.local" "false"
 set_conf_value "db.mongo.uri" "$MONGOURL"
 set_conf_value "statdb.mongo.uri" "$MONGOSTATURL"
-set_conf_value "unifi.db.name" "$UNIFI_DB_NAME"
+set_conf_value "unifi.db.name" "${UNIFI_DB_NAME:-unifi}"
 
-[ ! -z "${UNIFI_JVM_MAX_HEAP_SIZE}" ] && UNIFI_JVM_EXTRA_OPTS="${UNIFI_JVM_EXTRA_OPTS} -Xmx${UNIFI_JVM_MAX_HEAP_SIZE}"
-[ ! -z "${UNIFI_JVM_INIT_HEAP_SIZE}" ] && UNIFI_JVM_EXTRA_OPTS="${UNIFI_JVM_EXTRA_OPTS} -Xms${UNIFI_JVM_INIT_HEAP_SIZE}"
+[ -n "${UNIFI_JVM_MAX_HEAP_SIZE}" ] && UNIFI_JVM_EXTRA_OPTS="${UNIFI_JVM_EXTRA_OPTS} -Xmx${UNIFI_JVM_MAX_HEAP_SIZE}"
+[ -n "${UNIFI_JVM_INIT_HEAP_SIZE}" ] && UNIFI_JVM_EXTRA_OPTS="${UNIFI_JVM_EXTRA_OPTS} -Xms${UNIFI_JVM_INIT_HEAP_SIZE}"
 
 UNIFI_JVM_EXTRA_OPTS="${UNIFI_JVM_EXTRA_OPTS} -Dunifi.datadir=${DATADIR} -Dunifi.logdir=${LOGDIR} -Dunifi.rundir=${RUNDIR}"
-JVM_OPTS="${UNIFI_JVM_EXTRA_OPTS} -Djava.awt.headless=true -Dfile.encoding=UTF-8"
+JVM_OPTS="${UNIFI_JVM_EXTRA_OPTS} -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Dorg.xerial.snappy.tempdir=${TMPDIR}"
 
-if [ -n "$UNIFI_DB_HOST" ]
-then
-    log_info "Wait for mongoDB server on '${UNIFI_DB_HOST}:${UNIFI_DB_PORT:-27017}'"
-    /usr/local/bin/wait-for "${UNIFI_DB_HOST}":"${UNIFI_DB_PORT:-27017}"
+if [ -n "$UNIFI_DB_HOST" ]; then
+  log_info "Wait for mongoDB server on '${UNIFI_DB_HOST}:${UNIFI_DB_PORT:-27017}'"
+  /usr/local/bin/wait-for "${UNIFI_DB_HOST}":"${UNIFI_DB_PORT:-27017}"
 else
-    log_error "Required environment variable '\$UNIFI_DB_HOST' not set"
-    exit 1
+  log_error "Required environment variable '\$UNIFI_DB_HOST' not set"
+  exit 1
 fi
 
 log_info "Start Unifi Controller\n"
-exec /usr/bin/java ${JVM_OPTS} -Dorg.xerial.snappy.tempdir=${BASEDIR}/tmp -jar ${BASEDIR}/lib/ace.jar start
+exec /usr/bin/java ${JVM_OPTS} -jar ${BASEDIR}/lib/ace.jar start

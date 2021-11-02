@@ -33,7 +33,7 @@ RUN apk --update add --virtual .build-deps curl libarchive-tools tar && \
     mkdir -p /opt/app/unifi/data && \
     mkdir -p /opt/app/unifi/run && \
     UNIFI_VERSION="${UNIFI_VERSION##v}" && \
-    echo "Setup Unifi Controller v'${UNIFI_VERSION}' ..." && \
+    echo "Setup Unifi Controller 'v${UNIFI_VERSION}' ..." && \
     curl -SsL "https://www.ubnt.com/downloads/unifi/${UNIFI_VERSION}/UniFi.unix.zip" | \
         bsdtar -xf - -C /opt/app/unifi -X /.tarignore --strip-components=1 && \
     chown -R unifi:unifi /opt/app/unifi && \
