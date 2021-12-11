@@ -16,10 +16,10 @@ set_conf_value() {
   thekey="$1"
   newvalue="$2"
   if ! grep -R "^[#]*\s*${thekey}=.*" $filename >/dev/null; then
-    log_info "APPENDING because '${thekey}' not found"
+    log_info "Appending option '${thekey}' as not found"
     log_info "$thekey=$newvalue" >>$filename
   else
-    log_info "SETTING because '${thekey}' found already"
+    log_info "Skipping option '${thekey}' as found already"
     sed -ir "s,^[#]*\s*${thekey}=.*,$thekey=$newvalue," $filename
   fi
 }
