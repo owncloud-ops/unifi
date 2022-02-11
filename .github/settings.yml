@@ -1,9 +1,9 @@
 ---
 repository:
   name: unifi
-  description: Docker image for Unifi Controller
+  description: Custom container image for Ubiquiti Unifi Controller
   homepage: https://hub.docker.com/r/owncloudops/unifi
-  topics: docker, unifi
+  topics: oci, container, unifi
 
   private: false
   has_issues: true
