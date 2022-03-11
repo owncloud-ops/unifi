@@ -10,7 +10,7 @@ LABEL org.opencontainers.image.documentation="https://github.com/owncloud-ops/un
 ARG BUILD_VERSION
 ARG WAIT_FOR_VERSION
 
-ENV UNIFI_VERSION="${BUILD_VERSION:-6.5.55}"
+ENV UNIFI_VERSION="${BUILD_VERSION:-7.0.23}"
 # renovate: datasource=github-releases depName=thegeeklab/wait-for
 ENV WAIT_FOR_VERSION="${WAIT_FOR_VERSION:-v0.2.0}"
 
