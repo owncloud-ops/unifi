@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
+
 # shellcheck disable=SC3040
 set -eo pipefail
+
 # shellcheck disable=SC3046,SC1091
 source /usr/local/lib/log.sh
 
