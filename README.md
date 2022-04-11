@@ -39,4 +39,4 @@ docker build --build-arg BUILD_VERSION=5.14.23 -f Dockerfile -t unifi:latest .
 
 ## License
 
-This project is licensed under the Apache 2.0 License - see the [LICENSE](https://github.com/owncloud-ops/unifi/blob/master/LICENSE) file for details.
+This project is licensed under the Apache 2.0 License - see the [LICENSE](https://github.com/owncloud-ops/unifi/blob/main/LICENSE) file for details.
