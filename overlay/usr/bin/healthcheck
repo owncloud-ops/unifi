@@ -1,10 +1,9 @@
 #!/usr/bin/env sh
 
+# shellcheck disable=SC3040
 set -eo pipefail
 
 URL=http://127.0.0.1:8080/status
-
-wget --quiet --tries=1 --spider ${URL}
-[ $? -ne 0 ] && exit 1
+wget --quiet --tries=1 --spider ${URL} || exit 1
 
 exit 0
