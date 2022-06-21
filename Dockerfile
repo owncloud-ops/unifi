@@ -30,15 +30,15 @@ RUN addgroup -g 1001 -S unifi && \
 
 RUN apk --update add --virtual .build-deps curl libarchive-tools tar && \
     apk --update add binutils coreutils curl libcap openjdk8-jre openssl shadow su-exec tzdata gcompat && \
-    curl -SsL -o /usr/local/bin/wait-for "https://github.com/thegeeklab/wait-for/releases/download/${WAIT_FOR_VERSION}/wait-for" && \
-    curl -SsL "https://github.com/owncloud-ops/container-library/releases/download/${CONTAINER_LIBRARY_VERSION}/container-library.tar.gz" | tar xz -C / && \
+    curl -SsfL -o /usr/local/bin/wait-for "https://github.com/thegeeklab/wait-for/releases/download/${WAIT_FOR_VERSION}/wait-for" && \
+    curl -SsfL "https://github.com/owncloud-ops/container-library/releases/download/${CONTAINER_LIBRARY_VERSION}/container-library.tar.gz" | tar xz -C / && \
     chmod 755 /usr/local/bin/wait-for && \
     mkdir -p /opt/app/unifi/logs && \
     mkdir -p /opt/app/unifi/data && \
     mkdir -p /opt/app/unifi/run && \
     UNIFI_VERSION="${UNIFI_VERSION##v}" && \
     echo "Setup Unifi Controller 'v${UNIFI_VERSION}' ..." && \
-    curl -SsL "https://www.ubnt.com/downloads/unifi/${UNIFI_VERSION}/UniFi.unix.zip" | \
+    curl -SsfL "https://www.ubnt.com/downloads/unifi/${UNIFI_VERSION}/UniFi.unix.zip" | \
         bsdtar -xf - -C /opt/app/unifi -X /.tarignore --strip-components=1 && \
     chown -R unifi:unifi /opt/app/unifi && \
     apk del .build-deps && \
