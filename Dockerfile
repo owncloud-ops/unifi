@@ -1,4 +1,4 @@
-FROM amd64/alpine:3.17@sha256:c0d488a800e4127c334ad20d61d7bc21b4097540327217dfab52262adc02380c
+FROM amd64/debian:11-slim@sha256:25f10b4f1ded5341a3ca0a30290ff3cd5639415f0c5a2222d5e7d5dd72952aa1
 
 LABEL maintainer="ownCloud DevOps <devops@owncloud.com>"
 LABEL org.opencontainers.image.authors="ownCloud DevOps <devops@owncloud.com>"
@@ -22,14 +22,10 @@ ENV UNIFI_JVM_INIT_HEAP_SIZE=1024M
 
 ADD overlay /
 
-RUN apk --update --no-cache add bash ca-certificates gettext asciidoc \
-    git git-lfs gnupg openssh-keygen
-
-RUN addgroup -g 1001 -S unifi && \
-    adduser -S -D -H -u 1001 -h /opt/app -s /bin/bash -G unifi -g unifi unifi
-
-RUN apk --update add --virtual .build-deps curl libarchive-tools tar && \
-    apk --update add binutils coreutils curl libcap openjdk8-jre openssl shadow su-exec tzdata gcompat && \
+RUN addgroup --gid 1001 --system unifi && \
+    adduser --system --disabled-password --no-create-home --uid 1001 --home /opt/app --shell /sbin/nologin --ingroup unifi --gecos unifi unifi && \
+    apt-get update && apt-get install -y wget curl gnupg2 apt-transport-https ca-certificates openjdk-11-jre-headless openssl tzdata \
+        libarchive-tools ncat && \
     curl -SsfL -o /usr/local/bin/wait-for "https://github.com/thegeeklab/wait-for/releases/download/${WAIT_FOR_VERSION}/wait-for" && \
     curl -SsfL "https://github.com/owncloud-ops/container-library/releases/download/${CONTAINER_LIBRARY_VERSION}/container-library.tar.gz" | tar xz -C / && \
     chmod 755 /usr/local/bin/wait-for && \
@@ -41,8 +37,7 @@ RUN apk --update add --virtual .build-deps curl libarchive-tools tar && \
     curl -SsfL "https://www.ubnt.com/downloads/unifi/${UNIFI_VERSION}/UniFi.unix.zip" | \
         bsdtar -xf - -C /opt/app/unifi -X /.tarignore --strip-components=1 && \
     chown -R unifi:unifi /opt/app/unifi && \
-    apk del .build-deps && \
-    rm -rf /var/cache/apk/* && \
+    rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/*
 
 VOLUME /opt/app/unifi/data
