@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-# shellcheck disable=SC3040
 set -eo pipefail
 
-# shellcheck disable=SC3046,SC1091
+# shellcheck disable=SC1091
 source /usr/local/lib/log.sh
 
 BASEDIR="/opt/app/unifi"
