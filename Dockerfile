@@ -11,7 +11,7 @@ ARG BUILD_VERSION
 ARG WAIT_FOR_VERSION
 ARG CONTAINER_LIBRARY_VERSION
 
-ENV UNIFI_VERSION="${BUILD_VERSION:-7.3.76}"
+ENV UNIFI_VERSION="${BUILD_VERSION:-7.3.83}"
 # renovate: datasource=github-releases depName=thegeeklab/wait-for
 ENV WAIT_FOR_VERSION="${WAIT_FOR_VERSION:-v0.3.0}"
 # renovate: datasource=github-releases depName=owncloud-ops/container-library
