@@ -2,6 +2,7 @@
 
 [![Build Status](https://drone.owncloud.com/api/badges/owncloud-ops/unifi/status.svg)](https://drone.owncloud.com/owncloud-ops/unifi/)
 [![Docker Hub](https://img.shields.io/badge/docker-latest-blue.svg?logo=docker&logoColor=white)](https://hub.docker.com/r/owncloudops/unifi)
+[![Quay.io](https://img.shields.io/badge/quay-latest-blue.svg?logo=docker&logoColor=white)](https://quay.io/repository/owncloudops/unifi)
 
 Custom container image for [Ubiquiti](https://www.ui.com/) Unifi Controller.
 
