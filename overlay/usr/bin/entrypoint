@@ -57,4 +57,4 @@ fi
 log_info "Using JVM options: ${JVM_OPTS}"
 
 log_info "Start Unifi Controller\n"
-exec /usr/bin/java ${JVM_OPTS} -jar ${BASEDIR}/lib/ace.jar start
+exec /opt/java/openjdk/bin/java ${JVM_OPTS} -jar ${BASEDIR}/lib/ace.jar start
