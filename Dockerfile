@@ -24,7 +24,7 @@ ADD overlay /
 
 RUN addgroup --gid 1001 --system unifi && \
     adduser --system --disabled-password --no-create-home --uid 1001 --home /opt/app --shell /sbin/nologin --ingroup unifi --gecos unifi unifi && \
-    apt-get update && apt-get install -y wget curl gnupg2 apt-transport-https ca-certificates openjdk-11-jre-headless openssl tzdata \
+    apt-get update && apt-get install -y wget curl gnupg2 apt-transport-https ca-certificates openjdk-12-jre-headless openssl tzdata \
         libarchive-tools ncat && \
     curl -SsfL -o /usr/local/bin/wait-for "https://github.com/thegeeklab/wait-for/releases/download/${WAIT_FOR_VERSION}/wait-for" && \
     curl -SsfL "https://github.com/owncloud-ops/container-library/releases/download/${CONTAINER_LIBRARY_VERSION}/container-library.tar.gz" | tar xz -C / && \
