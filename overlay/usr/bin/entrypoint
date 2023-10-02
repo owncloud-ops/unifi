@@ -43,7 +43,7 @@ set_conf_value "unifi.db.name" "${UNIFI_DB_NAME:-unifi}"
 [ -n "${UNIFI_JVM_MAX_HEAP_SIZE}" ] && UNIFI_JVM_EXTRA_OPTS="${UNIFI_JVM_EXTRA_OPTS} -Xmx${UNIFI_JVM_MAX_HEAP_SIZE}"
 [ -n "${UNIFI_JVM_INIT_HEAP_SIZE}" ] && UNIFI_JVM_EXTRA_OPTS="${UNIFI_JVM_EXTRA_OPTS} -Xms${UNIFI_JVM_INIT_HEAP_SIZE}"
 
-UNIFI_JVM_EXTRA_OPTS="${UNIFI_JVM_EXTRA_OPTS} -Dunifi.datadir=${DATADIR} -Dunifi.logdir=${LOGDIR} -Dunifi.rundir=${RUNDIR}"
+UNIFI_JVM_EXTRA_OPTS="${UNIFI_JVM_EXTRA_OPTS} --add-opens java.base/java.time=ALL-UNNAMED -Dunifi.datadir=${DATADIR} -Dunifi.logdir=${LOGDIR} -Dunifi.rundir=${RUNDIR}"
 JVM_OPTS="${UNIFI_JVM_EXTRA_OPTS} -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Dorg.xerial.snappy.tempdir=${TMPDIR}"
 
 if [ -n "$UNIFI_DB_HOST" ]; then
