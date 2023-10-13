@@ -20,7 +20,7 @@ set_conf_value() {
     log_info "Appending option '${thekey}' as not found"
     log_info "$thekey=$newvalue" >>$filename
   else
-    log_info "Skipping option '${thekey}' as found already"
+    log_info "Ensure value for option '${thekey}'"
     sed -ir "s,^[#]*\s*${thekey}=.*,$thekey=$newvalue," $filename
   fi
 }
@@ -34,7 +34,7 @@ else
   cp /etc/templates/system.properties.tmpl ${DATADIR}/system.properties
 fi
 
-set_conf_value "unifi.logStdout" "true"
+set_conf_value "unifi.logStdout" "false"
 set_conf_value "db.mongo.local" "false"
 set_conf_value "db.mongo.uri" "$MONGOURL"
 set_conf_value "statdb.mongo.uri" "$MONGOSTATURL"
