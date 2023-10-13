@@ -37,6 +37,8 @@ RUN addgroup --gid 1001 --system unifi && \
     curl -SsfL "https://www.ubnt.com/downloads/unifi/${UNIFI_VERSION}/UniFi.unix.zip" | \
         bsdtar -xf - -C /opt/app/unifi -X /.tarignore --strip-components=1 && \
     chown -R unifi:unifi /opt/app/unifi && \
+    ln -sf /dev/stdout /opt/app/unifi/logs/server.log && \
+    ln -sf /dev/null /opt/app/unifi/logs/tasks.log && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/*
 
