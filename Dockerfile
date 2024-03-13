@@ -1,4 +1,4 @@
-FROM docker.io/eclipse-temurin:17-jre@sha256:3d40cf414fb9ca2b178e37bf0754557007d906acc9cb3805cbdfdbccd239f4b3
+FROM docker.io/eclipse-temurin:21-jre@sha256:9b2eb4c87131450727fe0393b4daf51983c5776b8d3aed66eabbfd3a167d21d0
 
 LABEL maintainer="ownCloud DevOps <devops@owncloud.com>"
 LABEL org.opencontainers.image.authors="ownCloud DevOps <devops@owncloud.com>"
